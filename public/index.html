@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="author" content="@k33g_org" />
+
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+  <title>Terra Demo</title>
+
+  <link rel="stylesheet" href="/Semantic-UI-CSS/semantic.min.css" />
+
+
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="ui fixed inverted menu">
+    <div class="ui container">
+      <a href="#" class="header item">
+        <img class="logo" src="/images/clever-cloud.png">
+        <span>&nbsp;Terra Demo for CC</span>
+      </a>
+      <a href="http://terra-demo.cleverapps.io/" class="item">🏠&nbsp;&nbsp;Home</a>
+      <a href="https://twitter.com/clever_cloud" class="item">@clever_cloud</a>
+      <a href="https://github.com/wey-yu/terra-demo" class="item">🐙❤️🐱&nbsp;&nbsp;Github</a>
+
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="ui container" style="padding-top:5%; padding-bottom:5%; height:80%">
+    <!-- custom tag(s) -->
+    <gateways-list></gateways-list>
+
+
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="ui inverted vertical footer segment">
+    <div class="ui center aligned container">
+          <img class="ui centered small circular image" src="/images/clever-cloud.png" alt="">
+          <h3>@clever_cloud</h3>
+          <p>
+          <h2>THE END OF SERVER MANAGEMENT</h2>
+          <h3>We help developers deploy and run their apps with bulletproof infrastructure, automatic scaling, fair pricing and other cool features.</h3>
+          </p>
+
+
+    </div>
+  </div>
+
+  <!-- include the tag(s) -->
+  <script type="riot/tag" src="gateways-list.html"></script>
+
+  <script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="/Semantic-UI-CSS/semantic.min.js"></script>
+  <script type="text/javascript" src="/js/riot+compiler.min.js"></script>
+
+
+  <!-- mount the tag(s) -->
+  <script>
+    riot.mount('gateways-list')
+  </script>
+
+</body>
+</html>
