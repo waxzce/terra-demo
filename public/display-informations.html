@@ -1,0 +1,117 @@
+<display-informations class="ui container segment" style="font-size:16px">
+
+  <h4 class="ui header">Informations</h4>
+
+  <div class="ui grid">
+    <div class="four wide column">
+      <div id="gaugeChart" class="epoch gauge-small"></div>
+    </div>
+    <div class="ten wide column">
+      <div id="lineChart" style="width: 700px; height: 150px" class="epoch"></div>
+    </div>
+
+  </div>
+
+  <script>
+    console.log('=== display-informations ===')
+
+    this.opts.broker.observe(this)
+
+
+
+    this.on("gateways-list:click:id", gateway_id => {
+      console.info("🐱", gateway_id)
+
+      if(!gateway_id) return
+
+      const myGauge = $('#gaugeChart').epoch({
+        type: 'time.gauge',
+        value: 0.5
+      });
+
+
+      const myLineChart = $('#lineChart').epoch({
+        type: 'time.line',
+        axes: ['left', 'bottom', 'right'],
+        data: [
+          {
+            label: "Temperature t1",
+            values: [
+            ]
+          },
+          {
+            label: "Temperature t2",
+            values: [
+            ]
+          },
+        ]
+      });
+
+      this.updateGaugeData = () => {
+        fetch(`/gateways/${gateway_id}/sensors/humidity/h1`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => response.json())
+        .then(jsonData => {
+          console.log(jsonData)
+          myGauge.push(jsonData.value/100)
+        })
+        .catch(error => console.error(error))
+      }
+
+      this.updateLineChartData = () => {
+        fetch(`/gateways/${gateway_id}/sensors/temperature/t1`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => response.json())
+        .then(jsonData1 => {
+            console.log(jsonData1)
+
+            fetch(`/gateways/${gateway_id}/sensors/temperature/t2`, {
+              method: 'GET',
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            .then(response => response.json())
+            .then(jsonData2 => {
+                console.log(jsonData2)
+
+                myLineChart.push(
+                  [
+                    {
+                      time: (new Date()).getTime(),
+                      y: jsonData1.value
+                    },
+                    {
+                      time: (new Date()).getTime(),
+                      y: jsonData2.value
+                    }
+                  ]
+                )
+
+            })
+
+
+
+
+
+        })
+        .catch(error => console.error(error))
+      }
+
+
+      const timerGauge = setInterval(this.updateGaugeData, 1000)
+      const timerLineChart = setInterval(this.updateLineChartData, 1000)
+
+
+    })
+
+  </script>
+</display-informations>

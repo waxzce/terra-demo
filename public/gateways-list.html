@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       <tr each={ gateways }>
-        <td><i class="info circle icon"></i>{id}</td>
+        <td><i class="info circle icon"></i><a href="#{id}">{id}</a></td>
         <td><i class="world icon"></i>{host}</td>
         <td>{port}</td>
         <td>{services}</td>
@@ -48,6 +48,13 @@
   <script>
     console.log('=== gateways-list ===')
 
+    this.opts.broker.observe(this)
+
+    this.on("hi", function(data) {
+      console.info("🐼", data)
+    })
+
+
     updateGatewaysList() {
       fetch('/gateways/details', {
         method: 'GET',
@@ -65,6 +72,11 @@
     }
 
     const timer = setInterval(this.updateGatewaysList, 1000)
+
+    route((id) => {
+      console.log(id)
+      this.opts.broker.emit("gateways-list:click:id", id)
+    })
 
     this.updateGatewaysList()
 

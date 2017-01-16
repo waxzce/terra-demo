@@ -45,7 +45,8 @@ let getGatewayInfos = (gatewayKey) => {
           if(err) {
             // timeout
             console.error(`😡 gateway ${gatewayInfos.id} is ko`)
-            //delete from redis db
+            // delete from redis db ... or not
+            // ⚠️ gateways have to re publish their id periodically
             rediscli.del(gatewayInfos.id, (err, reply) => {
               console.error(`🤢 gateway ${gatewayInfos.id} removed from db`)
             })
@@ -62,8 +63,9 @@ let getGatewayInfos = (gatewayKey) => {
   })
 }
 
-// TODO: study how to use redis like a pro
+// TODO: study how to use redis like a pro -> pub/sub
 
+// list of connected gateways
 app.get('/gateways/all', (req, res) => {
   rediscli.keys(
     "gateway-*", (err, reply) => {
@@ -73,11 +75,7 @@ app.get('/gateways/all', (req, res) => {
   );
 });
 
-//TODO
-//smething working
-//query the service yo
-// remove fron redis db if don't exist
-
+// list of connected gateways and details
 app.get('/gateways/details', (req, res) => {
   rediscli.keys(
     "gateway-*", (err, gatewaysList) => {
@@ -86,17 +84,17 @@ app.get('/gateways/details', (req, res) => {
       })
       Promise.all(promises).then(gatewayData =>{
         console.log("🎃 All Gateways informations:", gatewayData)
-
         res.send(JSON.parse(JSON.stringify(gatewayData)))
       })
     }
   );
 });
 
+// test: http://localhost:8080/gateways/gateway-42-service-local-dev/yo
+app.get('/gateways/:gateway_id/yo', (req, res) => {
+  let gateway_id = req.params.gateway_id
 
-app.get('/services/yo', (req, res) => {
-  // search all *gateway ...
-  getClient("gateway-42-service-on-clever-cloud").then(client => {
+  getClient(gateway_id).then(client => {
     client.act({role: "hello", cmd: "yo"}, (err, item) => {
       res.send(item)
     })
@@ -104,24 +102,34 @@ app.get('/services/yo', (req, res) => {
 
 });
 
-app.get('/services/product', (req, res) => {
-  getClient("gateway-42-service-on-clever-cloud").then(client => {
-    client.act({role:'math', cmd: 'product', a:40, b:20}, (err, item) => {
-      console.log("item", item)
-      let product = item
-      res.send({product})
+// test: http://localhost:8080/gateways/gateway-42-service-local-dev/sensors/temperature/t2
+app.get('/gateways/:gateway_id/sensors/temperature/:sensor_id', (req, res) => {
+  let gateway_id = req.params.gateway_id
+  let sensor_id = req.params.sensor_id
+
+  getClient(gateway_id).then(client => {
+    client.act({role: "one-sensor", cmd: "temperature", id: sensor_id}, (err, item) => {
+      res.send(item)
     })
+  }).catch(err => {
+    res.sendStatus(404)
   })
+
 });
 
-app.get('/services/sum', (req, res) => {
-  getClient("gateway-42-service-on-clever-cloud").then(client => {
-    client.act({role:'math', cmd: 'sum', a:4, b:2}, (err, item) => {
-      console.log("item", item)
-      let sum = item
-      res.send({sum})
+// test: http://localhost:8080/gateways/gateway-42-service-local-dev/sensors/humidity/h3
+app.get('/gateways/:gateway_id/sensors/humidity/:sensor_id', (req, res) => {
+  let gateway_id = req.params.gateway_id
+  let sensor_id = req.params.sensor_id
+
+  getClient(gateway_id).then(client => {
+    client.act({role: "one-sensor", cmd: "humidity", id: sensor_id}, (err, item) => {
+      res.send(item)
     })
+  }).catch(err => {
+    res.sendStatus(404)
   })
+
 });
 
 

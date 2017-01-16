@@ -13,7 +13,7 @@
   <title>Terra Demo</title>
 
   <link rel="stylesheet" href="/Semantic-UI-CSS/semantic.min.css" />
-
+  <link rel="stylesheet" href="/epoch-0.8.4/epoch.min.css" />
 
 </head>
 <body>
@@ -32,9 +32,10 @@
   </div>
 
   <!-- CONTENT -->
-  <div class="ui container" style="padding-top:5%; padding-bottom:5%; height:80%">
+  <div class="ui container" style="padding-top:10%; padding-bottom:5%; height:80%">
     <!-- custom tag(s) -->
     <gateways-list></gateways-list>
+    <display-informations></display-informations>
 
 
 
@@ -56,15 +57,37 @@
 
   <!-- include the tag(s) -->
   <script type="riot/tag" src="gateways-list.html"></script>
+  <script type="riot/tag" src="display-informations.html"></script>
+
 
   <script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="/Semantic-UI-CSS/semantic.min.js"></script>
+
+  <script type="text/javascript" src="/js/d3.min.js"></script>
+  <script type="text/javascript" src="/epoch-0.8.4/epoch.min.js"></script>
+
   <script type="text/javascript" src="/js/riot+compiler.min.js"></script>
+  <script type="text/javascript" src="/js/route.min.js"></script>
 
 
   <!-- mount the tag(s) -->
   <script>
-    riot.mount('gateways-list')
+    route.start(true)
+    // my little broker
+    window.broker = {
+      observables: [],
+      observe: function (observable) {
+        this.observables.push(observable);
+      },
+      emit: function (message, data) {
+        this.observables.forEach(function (observable) {
+          observable.trigger(message, data)
+        })
+      }
+    };
+
+    riot.mount('gateways-list', {broker: broker})
+    riot.mount('display-informations', {broker: broker})
   </script>
 
 </body>
