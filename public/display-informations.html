@@ -1,6 +1,6 @@
 <display-informations class="ui container segment" style="font-size:16px">
 
-  <h4 class="ui header">Informations</h4>
+  <h4 class="ui header">Gateway: {gateway_id}</h4>
 
   <div class="ui grid">
     <div class="four wide column">
@@ -17,12 +17,13 @@
 
     this.opts.broker.observe(this)
 
-
-
     this.on("gateways-list:click:id", gateway_id => {
       console.info("🐱", gateway_id)
 
       if(!gateway_id) return
+
+      this.gateway_id = gateway_id;
+      this.update();
 
       const myGauge = $('#gaugeChart').epoch({
         type: 'time.gauge',
