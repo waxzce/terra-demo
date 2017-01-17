@@ -9,7 +9,7 @@
   <table class="ui celled table">
     <thead>
       <tr>
-        <th>Gateway ID</th>
+        <th>Gateway ID ({selectedGateway})</th>
         <th>Host</th>
         <th>Port</th>
         <!--
@@ -54,6 +54,10 @@
 
     this.opts.broker.observe(this)
 
+    //this.firstDisplay = true;
+    this.onHome=0;
+    this.selectedGateway = null;
+
     this.on("hi", function(data) {
       console.info("🐼", data)
     })
@@ -70,7 +74,31 @@
       .then(jsonData => {
         //console.log(jsonData)
         this.gateways = jsonData
+
+        // only if nothing is selected
+        if(this.onHome == 1) { // very first time
+          console.log("🐨", this.gateways[0].id)
+          this.selectedGateway = this.gateways[0].id
+          //this.update()
+          this.opts.broker.emit("gateways-list:click:id", this.gateways[0].id)
+          this.onHome += 1
+        }
+
+        if(!this.gateways.find(
+            (g) => {return g.id == this.selectedGateway }
+          ))
+        {
+          this.selectedGateway = `HUSTON WE HAVE PROBLEM WITH ${this.selectedGateway}`
+          this.update();
+          this.selectedGateway = this.gateways[0].id;
+          this.opts.broker.emit("gateways-list:click:id", this.gateways[0].id)
+          // OR Change the route?
+          //route(`/${this.gateways[0].id}`);
+        }
+
+
         this.update()
+
       })
       .catch(error => console.error(error))
     }
@@ -78,8 +106,15 @@
     const timer = setInterval(this.updateGatewaysList, 1000)
 
     route((id) => {
-      console.log(id)
+      console.log("🎃", id)
+      this.selectedGateway = id;
+      //this.update()
       this.opts.broker.emit("gateways-list:click:id", id)
+    })
+
+    route("/", () => {
+      console.log("🙊")
+      this.onHome += 1
     })
 
     this.updateGatewaysList()

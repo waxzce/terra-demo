@@ -32,15 +32,19 @@
 
     const source = new EventSource('/instance/informations');
 
+    this.opts.broker.observe(this)
+
     source.addEventListener('message', (event) => {
 
-      const informations = JSON.parse(event.data)
-
+      const informations = JSON.parse(event.data);
+      /*
       if(this.COMMIT_ID !== informations.COMMIT_ID && this.message == "") {
         this.message = "⚠️ new application deployed!"
       }
+      TODO: try something with on change or with the broker
+      */
 
-      console.log("🐼", informations);
+      //console.log("🐼", informations);
       this.APP_ID =  informations.APP_ID;
       this.INSTANCE_ID = informations.INSTANCE_ID;
       this.INSTANCE_TYPE = informations.INSTANCE_TYPE;
