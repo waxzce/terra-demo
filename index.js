@@ -188,7 +188,7 @@ app.get('/instance/informations', (req, res) => {
       getOpenConnections().findIndex(item => item == res), 1
     )
 
-    console.log("🎲", getOpenConnections().length);
+    console.log("🎲🎲🎲", getOpenConnections().length);
   });
 });
 // +++++++ End of SSE Experiments ++++++++

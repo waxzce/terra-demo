@@ -14,24 +14,23 @@
 
   <link rel="stylesheet" href="/Semantic-UI-CSS/semantic.min.css" />
   <link rel="stylesheet" href="/epoch-0.8.4/epoch.min.css" />
+  <style>
 
+  </style>
 </head>
 <body>
   <!-- HEADER -->
   <clever-header></clever-header>
 
   <!-- CONTENT -->
-  <div class="ui container" style="height:80%">
+  <div class="ui container" >
     <padding-top></padding-top>
     <application-informations></application-informations>
     <gateways-list></gateways-list>
     <display-charts></display-charts>
-  </div>
+    <padding-top></padding-top>
 
-  <!-- FOOTER -->
-  <!--
-  <clever-footer></clever-footer>
-  -->
+  </div>
 
   <div class="ui inverted vertical footer segment">
     <div class="ui center aligned container">
@@ -43,13 +42,19 @@
       </p>
     </div>
   </div>
-  
+
+  <!-- FOOTER -->
+  <!--
+  <clever-footer></clever-footer>
+  -->
+
+
+
   <!-- include the tag(s) -->
   <script type="riot/tag" src="clever-header.html"></script>
   <!--
   <script type="riot/tag" src="clever-footer.html"></script>
   -->
-
   <script type="riot/tag" src="padding-top.html"></script>
   <script type="riot/tag" src="gateways-list.html"></script>
   <script type="riot/tag" src="display-charts.html"></script>
