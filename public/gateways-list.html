@@ -19,7 +19,7 @@
     </thead>
     <tbody>
       <tr each={ gateways }>
-        <td><i class="info circle icon"></i><a href="#{id}">{id}</a></td>
+        <td><i class="info circle icon"></i><a href="#{id}">{id}</a> <small>{instanceInformations.COMMIT_ID}</small></td>
         <td><i class="world icon"></i>{host}</td>
         <td>{port}</td>
         <!--

@@ -37,29 +37,34 @@ let getGatewayInfos = (gatewayKey) => {
   return new Promise((resolve, reject) => {
     rediscli.get(gatewayKey, (err, reply) => {
       if(err) reject(err)
-      let gatewayInfos = JSON.parse(reply.toString())
-      gatewayInfos.id = gatewayKey // this is the service id
+      if(reply) {
+        let gatewayInfos = JSON.parse(reply.toString())
 
-      // check if gateway is ok
-      getClient(gatewayInfos.id).then(client => {
-        client.act({role: "hello", cmd: "yo"}, (err, item) => {
-          if(err) {
-            // timeout
-            console.error(`😡 gateway ${gatewayInfos.id} is ko`)
-            // delete from redis db ... or not
-            // ⚠️ gateways have to re publish their id periodically
-            rediscli.del(gatewayInfos.id, (err, reply) => {
-              console.error(`🤢 gateway ${gatewayInfos.id} removed from db`)
-            })
+        gatewayInfos.id = gatewayKey // this is the service id
 
-          } else {
-            console.log(`😃 gateway ${gatewayInfos.id} is ok`,item)
-          }
+        // check if gateway is ok
+        getClient(gatewayInfos.id).then(client => {
+          client.act({role: "hello", cmd: "yo"}, (err, item) => {
+            if(err) {
+              // timeout
+              console.error(`😡 gateway ${gatewayInfos.id} is ko`)
+              // delete from redis db ... or not
+              // ⚠️ gateways have to re publish their id periodically
+              rediscli.del(gatewayInfos.id, (err, reply) => {
+                console.error(`🤢 gateway ${gatewayInfos.id} removed from db`)
+              })
 
-        })
-      }).catch(err => console.log("🤢"))
+            } else {
+              console.log(`😃 gateway ${gatewayInfos.id} is ok`,item)
+            }
 
-      resolve(gatewayInfos)
+          })
+        }).catch(err => console.log("🤢"))
+
+        resolve(gatewayInfos)
+
+      } // end if
+
     });
   })
 }
