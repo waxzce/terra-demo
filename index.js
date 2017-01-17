@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const Promise = require('promise');
 const seneca = require('seneca')
 
+
 const port = process.env.PORT || 8080;
 
 const app = express();
@@ -132,6 +133,60 @@ app.get('/gateways/:gateway_id/sensors/humidity/:sensor_id', (req, res) => {
 
 });
 
+// +++++++++++ SSE Experiments +++++++++++
+
+const openConnections = []
+
+const sendSSEData = (openConnections) => {
+  const d = new Date();
+  const instanceInformations = {
+    APP_ID: process.env.APP_ID || "APP_ID",
+    INSTANCE_ID: process.env.INSTANCE_ID || "INSTANCE_ID",
+    INSTANCE_TYPE: process.env.INSTANCE_TYPE || "INSTANCE_TYPE",
+    COMMIT_ID: process.env.COMMIT_ID || "COMMIT_ID",
+    INSTANCE_NUMBER: process.env.INSTANCE_NUMBER || "INSTANCE_NUMBER",
+    d: d.getMilliseconds()
+  }
+  // we walk through each connection
+  openConnections.forEach((resp) => {
+    resp.write('id: ' + d.getMilliseconds() + '\n');
+    resp.write('data:' + JSON.stringify(instanceInformations) + '\n\n');
+  });
+}
+
+const callSendSSEData = () => sendSSEData(openConnections)
+const getOpenConnections = () => openConnections
+
+const timer = setInterval(callSendSSEData, 1000)
+
+app.get('/instance/informations', (req, res) => {
+
+  //req.socket.setTimeout(5000);
+
+  // send headers for event-stream connection
+  res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive'
+  });
+  res.write('\n');
+
+  // push this res object to our global variable
+  getOpenConnections().push(res);
+
+  // When the request is closed, e.g. the browser window
+  // is closed. We search through the open connections
+  // array and remove this connection.
+  req.on("close", function() {
+    // not even sure that happens 😮
+    getOpenConnections().splice(
+      getOpenConnections().findIndex(item => item == res), 1
+    )
+
+    console.log("🎲", getOpenConnections().length);
+  });
+});
+// +++++++ End of SSE Experiments ++++++++
 
 app.listen(port);
 console.log(`🌍 Web Server is started - listening on ${port}`);

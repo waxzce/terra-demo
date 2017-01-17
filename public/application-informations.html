@@ -1,0 +1,63 @@
+<application-informations class="ui container segment" style="font-size:16px">
+
+  <!--
+  <h4 class="ui header">Application informations</h4>
+  -->
+
+  <div class="ui message">
+
+    <div class="content">
+      <div class="header">
+        <i class="notched circle loading icon"></i> Application informations [{d}]
+      </div>
+      <p>
+        <b>APP_ID:</b> {APP_ID} |
+        <b>INSTANCE_ID:</b> {INSTANCE_ID} |
+        <b>INSTANCE_TYPE:</b> {INSTANCE_TYPE} |
+        <b>COMMIT_ID:</b> {COMMIT_ID} |
+        <b>INSTANCE_NUMBER:</b> {INSTANCE_NUMBER}
+      </p>
+      <!--
+      <ul class="list">
+        <li>APP_ID: {APP_ID}</li>
+        <li>INSTANCE_ID: {INSTANCE_ID}</li>
+        <li>INSTANCE_TYPE: {INSTANCE_TYPE}</li>
+        <li>COMMIT_ID: {COMMIT_ID}</li>
+        <li>INSTANCE_NUMBER: {INSTANCE_NUMBER}</li>
+      </ul>
+      -->
+    </div>
+  </div>
+
+
+  <script>
+
+    const source = new EventSource('/instance/informations');
+
+    source.addEventListener('message', (event) => {
+      const informations = JSON.parse(event.data)
+      console.log("🐼", informations);
+      this.APP_ID =  informations.APP_ID;
+      this.INSTANCE_ID = informations.INSTANCE_ID;
+      this.INSTANCE_TYPE = informations.INSTANCE_TYPE;
+      this.COMMIT_ID = informations.COMMIT_ID;
+      this.INSTANCE_NUMBER = informations.INSTANCE_NUMBER;
+
+      this.d = informations.d;
+
+      this.update();
+
+    }, false);
+
+    source.addEventListener('open', (e) => {
+      // Connection was opened.
+    }, false);
+
+    source.addEventListener('error', (e) => {
+      if (e.readyState == EventSource.CLOSED) {
+        // Connection was closed.
+      }
+    }, false);
+  </script>
+
+</application-informations>
