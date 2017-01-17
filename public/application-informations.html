@@ -8,14 +8,12 @@
 
     <div class="content">
       <div class="header">
-        <i class="notched circle loading icon"></i> Application informations [data id: {d}]
+        <i class="notched circle loading icon"></i> Application informations [data id: {d}] {message}
       </div>
       <p>
         <b>APP_ID:</b> {APP_ID} |
         <b>INSTANCE_ID:</b> {INSTANCE_ID} |
-        <b>INSTANCE_TYPE:</b> {INSTANCE_TYPE} |
         <b>COMMIT_ID:</b> {COMMIT_ID} |
-        <b>INSTANCE_NUMBER:</b> {INSTANCE_NUMBER}
       </p>
       <!--
       <ul class="list">
@@ -35,7 +33,13 @@
     const source = new EventSource('/instance/informations');
 
     source.addEventListener('message', (event) => {
+
       const informations = JSON.parse(event.data)
+
+      if(this.COMMIT_ID !== informations.COMMIT_ID && this.message == "") {
+        this.message = "⚠️ new application deployed!"
+      }
+
       console.log("🐼", informations);
       this.APP_ID =  informations.APP_ID;
       this.INSTANCE_ID = informations.INSTANCE_ID;
