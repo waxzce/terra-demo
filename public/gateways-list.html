@@ -21,7 +21,7 @@
     </thead>
     <tbody>
       <tr each={ gateways }>
-        <td><i class="info circle icon"></i><a href="#{id}">{id}</a></td>
+        <td><i class="info circle icon"></i><a href="#{id}">{id}</a> {instanceInformations.kind}</td>
         <td><small class="ui tiny label">{instanceInformations.INSTANCE_ID.substring(0,10)+"..."}</small></td>
         <td><small class="ui tiny label">{instanceInformations.COMMIT_ID.substring(0,10)+"..."}</small></td>
         <td><i class="world icon"></i>{host}</td>
