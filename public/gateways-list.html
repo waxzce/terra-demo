@@ -97,8 +97,8 @@
             (g) => {return g.id == this.selectedGateway }
           ))
         {
-          this.selectedGateway = `HUSTON WE HAVE PROBLEM WITH ${this.selectedGateway}`
-          this.update();
+          //this.selectedGateway = `HUSTON WE HAVE PROBLEM WITH ${this.selectedGateway}`
+          //this.update();
           this.selectedGateway = this.gateways[0].id;
           this.opts.broker.emit("gateways-list:click:id", this.gateways[0].id)
           // OR Change the route?
