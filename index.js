@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static('public'));
 
-const rediscli = require("redis").createClient({
+cnst rediscli = require("redis").createClient({
   url:process.env.REDIS_URL
 });
 
