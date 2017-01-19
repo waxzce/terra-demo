@@ -11,6 +11,7 @@
         <i class="notched circle loading icon"></i> Application informations [data id: {d}] {message}
       </div>
       <p>
+        <b>TOTO:</b> {TOTO} |
         <b>APP_ID:</b> {APP_ID} |
         <b>INSTANCE_ID:</b> {INSTANCE_ID.substring(0,5)+"..."} |
         <b>COMMIT_ID:</b> {COMMIT_ID.substring(0,5)+"..."}
@@ -46,6 +47,7 @@
 
       //console.log("🐼", informations);
       this.APP_ID =  informations.APP_ID;
+      this.TOTO =  informations.TOTO;
       this.INSTANCE_ID = informations.INSTANCE_ID;
       this.INSTANCE_TYPE = informations.INSTANCE_TYPE;
       this.COMMIT_ID = informations.COMMIT_ID;
