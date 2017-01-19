@@ -146,6 +146,7 @@ const sendSSEData = (openConnections) => {
   const d = new Date();
   const instanceInformations = {
     APP_ID: process.env.APP_ID || "APP_ID",
+    TOTO: process.env.TOTO || "TOTO",
     INSTANCE_ID: process.env.INSTANCE_ID || "INSTANCE_ID",
     INSTANCE_TYPE: process.env.INSTANCE_TYPE || "INSTANCE_TYPE",
     COMMIT_ID: process.env.COMMIT_ID || "COMMIT_ID",
