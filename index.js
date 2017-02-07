@@ -4,7 +4,7 @@ const Promise = require('promise');
 const seneca = require('seneca')
 
 
-onst port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 const app = express();
 app.use(bodyParser.json());
