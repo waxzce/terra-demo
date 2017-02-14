@@ -96,6 +96,11 @@ app.get('/gateways/details', (req, res) => {
   );
 });
 
+// list of connected gateways and details
+app.get('/killme', (req, res) => {
+  process.exit(1);
+});
+
 // test: http://localhost:8080/gateways/gateway-42-service-local-dev/yo
 app.get('/gateways/:gateway_id/yo', (req, res) => {
   let gateway_id = req.params.gateway_id
